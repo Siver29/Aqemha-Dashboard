@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 function InActiveVolunteers() {
   const [volunteers, setVolunteers] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [refresh, setRefresh] = useState([]);
   const [error, setError] = useState(null);
 
   let token = localStorage.getItem('token')
@@ -38,6 +39,7 @@ function InActiveVolunteers() {
         console.log(data)
         console.log(data.data)
         const filteredData = data.data.map((item) => ({
+            id: item.id,
             fullName: `${item.first_name} ${item.last_name}`,
             phoneNum: item.phone_num,
             birthDate: item.birth_date,
@@ -51,12 +53,39 @@ function InActiveVolunteers() {
     };
 
     fetchVolunteers();
-  }, []);
+  }, [refresh]);
+
+  const handleAccept = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/active/${id}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/vnd.api+json',
+          'Content-Type': 'application/vnd.api+json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      alert('Volunteer accepted successfully')
+      setRefresh(!refresh)
+      console.log('Volunteer accepted successfully');
+    } catch (error) {
+      setError(error.message);
+    }
+  }
 
   return (
     <div className="container">
       <VolunteerFilter onFilterChange={handleFilterChange}/>
-      <CampaignTable campaigns={volunteers} columns={columns} name='طلبات التطوع'/>
+      <CampaignTable campaigns={volunteers} columns={columns} name='طلبات التطوع'
+                 renderActions={(campaign) => (
+                  <React.Fragment>
+                    <button onClick={() => handleAccept(campaign.id)}>Accept</button>
+                  </React.Fragment>
+                )}/>
     </div>
   );
 }
