@@ -1,23 +1,45 @@
-import logo from './logo.svg';
 import './App.css';
+import SideBar from './Components/SideBar';
+import Campaign from './Pages/Campaign';
+import Beneficiary from './Pages/Beneficiary';
+import Donation from './Pages/Donation';
+import News from './Pages/News';
+import Volunteer from './Pages/Volunteer';
+import Refer from './Pages/Refer';
+import Programs from './Pages/Programs';
+import DashboardHeader from './Components/DashboardHeader';
+import { BrowserRouter, Routes, Route} from 'react-router-dom';
+import Login from './Components/Auth/Login';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
+  const token = localStorage.getItem('token');
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App app-container container-fluid">
+      <BrowserRouter>
+        {token ? (
+          <div className='row w-100'>
+            <div className='col-2'>
+              <SideBar/>
+            </div>
+            <div className='col-10'>
+              <DashboardHeader/>
+              <Routes>
+                <Route path="/volunteers" element={<Volunteer />} />
+                <Route path="/beneficiaries" element={<Beneficiary />} />
+                <Route path="/donations" element={<Donation />} />
+                <Route path="/" element={<Campaign />} />
+                <Route path="/news" element={<News />} />
+                <Route path="/refer" element={<Refer />} />
+                <Route path="/programs" element={<Programs />} />
+              </Routes>
+            </div>
+          </div>
+        ) : (
+          <Login />
+        )}
+      </BrowserRouter>
     </div>
   );
 }
