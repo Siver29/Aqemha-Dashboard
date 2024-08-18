@@ -15,9 +15,9 @@ function VolunteerStatusWrapper() {
           <div className='row'>
             <div className='col-2'></div>
             <div className='col-8 d-flex justify-content-around align-items-center mb-5'>
-              <button className='btn text-white w-25 primaryColor' onClick={() => handleButtonClick('volunteers')}>المتطوعين</button>
-              <button className='btn text-white w-25 primaryColor' onClick={() => handleButtonClick('requests')}>طلبات التطوع</button>
-              <button className='btn text-white w-25 primaryColor' onClick={() => handleButtonClick('certificates')}>الشهادات</button>
+              <button className='btn text-white w-50 mx-3 primaryColor' onClick={() => handleButtonClick('volunteers')}>المتطوعين</button>
+              <button className='btn text-white w-50 primaryColor' onClick={() => handleButtonClick('requests')}>طلبات التطوع</button>
+              {/* <button className='btn text-white w-25 primaryColor' onClick={() => handleButtonClick('certificates')}>الشهادات</button> */}
             </div>
             <div className='col-2'></div>
           </div>

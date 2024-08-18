@@ -79,12 +79,12 @@ function ShowPrograms({refresh}) {
   return (
     <div>
       <CampaignTable campaigns={programs} columns={columns} name='البرامج'
-              renderActions={(id) => (
-                <React.Fragment>
-                  <button onClick={() => handleUpdate(id)}>Update</button>
-                  <button onClick={() => handleDelete(id)}>Delete</button>
-                </React.Fragment>
-              )}/>
+            renderActions={(campaign) => (
+              <React.Fragment>
+                <button onClick={() => handleUpdate(campaign.id)}>Update</button>
+                <button onClick={() => handleDelete(campaign.id)}>Delete</button>
+              </React.Fragment>
+            )}/>
       {error && <div style={{ color: 'red' }}>{error}</div>}
     </div>
   );

@@ -18,7 +18,8 @@
 //   const [partnerName, setPartnerName] = useState('');
 //   const [partnerFatherName, setPartnerFatherName] = useState('');
 //   const [partnerMotherName, setPartnerMotherName] = useState('');
-//   const [partnerBirthDate, setPartnerBirthDate] = useState('');
+//   const [partnerBirthDate, setPartnerBirthDate] = useSt
+ate('');
 //   const [partnerBirthPlace, setPartnerBirthPlace] = useState('');
 //   const [familyMembersNumber, setFamilyMembersNumber] = useState('');
 //   const [malesNumber, setMalesNumber] = useState('');

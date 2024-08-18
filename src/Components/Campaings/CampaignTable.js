@@ -24,7 +24,7 @@ function CampaignTable({ campaigns, columns, name, renderActions }) {
               {columns.map((column) => (
                 <td key={column}>{campaign[column]}</td>
               ))}
-              {renderActions && <td>{renderActions(campaign.id)}</td>}
+              {renderActions && <td>{renderActions(campaign)}</td>}
             </tr>
           ))}
         </tbody>

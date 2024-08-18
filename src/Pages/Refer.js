@@ -45,23 +45,25 @@ function Refer() {
   }, [refresh]);
   
   const handleAccept = (id) =>{
-    const url = `http://localhost:8000/api/acceptReferOffer/${id}`;
+    console.log(id)
     
-        fetch(url, {
-          method: "POST",
-          headers: {
-            "Accept": "application/vnd.api+json",
-            "Content-Type": "application/vnd.api+json",
-            "Authorization": `Bearer ${token}`
-          }
-        })
-        .then(response => response.json())
-        .then(data =>{
-            setRefresh(!refresh)
-            console.log(data)
-        }
-        )
-        .catch(error => console.error(error));
+    // const url = `http://localhost:8000/api/acceptReferOffer/${id}`;
+    
+    //     fetch(url, {
+    //       method: "POST",
+    //       headers: {
+    //         "Accept": "application/vnd.api+json",
+    //         "Content-Type": "application/vnd.api+json",
+    //         "Authorization": `Bearer ${token}`
+    //       }
+    //     })
+    //     .then(response => response.json())
+    //     .then(data =>{
+    //         setRefresh(!refresh)
+    //         console.log(data)
+    //     }
+    //     )
+    //     .catch(error => console.error(error));
     
   }
   const handleReject = (id) =>{
@@ -91,17 +93,17 @@ function Refer() {
         campaigns={offers}
         columns={columns}
         name='Pending Offers'
-        renderActions={(offers) => (
+        renderActions={(campaign) => (
           <React.Fragment>
             <button
               className='btn btn-success mx-2'
-              onClick={() => handleAccept(offers.id)}
+              onClick={() => handleAccept(campaign.id)}
             >
               قبول
             </button>
             <button
               className='btn btn-danger'
-              onClick={() => handleReject(offers.id)}
+              onClick={() => handleReject(campaign.id)}
             >
               رفض
             </button>

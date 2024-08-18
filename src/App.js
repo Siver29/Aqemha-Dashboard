@@ -24,7 +24,7 @@ function App() {
               <SideBar/>
             </div>
             <div className='col-10'>
-              <DashboardHeader/>
+              {/* <DashboardHeader/> */}
               <Routes>
                 <Route path="/volunteers" element={<Volunteer />} />
                 <Route path="/beneficiaries" element={<Beneficiary />} />

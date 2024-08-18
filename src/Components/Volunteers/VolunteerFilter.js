@@ -43,7 +43,7 @@ function VolunteerFilter({onFilterChange}) {
           'Content-Type': 'application/vnd.api+json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ specialization }),
+        body: JSON.stringify({ specialization : specialization }),
       });
       const data = await response.json();
       console.log(data);
@@ -120,8 +120,8 @@ function VolunteerFilter({onFilterChange}) {
       {showSelect.specialization && (
         <select ref={specializationRef} onChange={handleSelectChange} className='form-control w-50 mx-auto text-center mt-3'>
           <option value="">إختر إختصاص</option>
-          <option value="study">طبي</option>
-          <option value="option2">غير طبي</option>
+          <option value="طبي">طبي</option>
+          <option value="غير طبي">غير طبي</option>
         </select>
       )}
       {showSelect.skill && (
