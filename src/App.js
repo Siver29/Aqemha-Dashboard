@@ -7,6 +7,7 @@ import News from './Pages/News';
 import Volunteer from './Pages/Volunteer';
 import Refer from './Pages/Refer';
 import Programs from './Pages/Programs';
+import Support from './Pages/Support';
 import DashboardHeader from './Components/DashboardHeader';
 import { BrowserRouter, Routes, Route} from 'react-router-dom';
 import Login from './Components/Auth/Login';
@@ -33,6 +34,7 @@ function App() {
                 <Route path="/news" element={<News />} />
                 <Route path="/refer" element={<Refer />} />
                 <Route path="/programs" element={<Programs />} />
+                <Route path="/support" element={<Support />} />
               </Routes>
             </div>
           </div>
