@@ -1,0 +1,59 @@
+/* Beneficiary.css */
+
+/* تحسين تصميم الأزرار */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+  
+  .btn-outline-primary {
+    color: #007bff;
+    border-color: #007bff;
+  }
+  
+  .btn-outline-primary:hover {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  /* تحسين تصميم الجدول */
+  .table {
+    margin-top: 20px;
+  }
+  
+  .table-dark th {
+    background-color: #343a40;
+    color: #fff;
+  }
+  
+  .beneficiary-container {
+    max-width: 1200px;
+    margin: auto;
+  }
+  
+  .filter-buttons .btn {
+    margin-right: 10px;
+  }
+  
+  .table-responsive {
+    overflow-x: auto;
+  }
+  
+  .header {
+    margin-bottom: 20px;
+  }
+  
+  .add-beneficiary-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
