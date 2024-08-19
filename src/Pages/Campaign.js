@@ -47,14 +47,16 @@ function Campaign() {
         body: formData
       });
       const responseJson = await response.json();
-      if(responseJson.ok){
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       console.log(responseJson);
       setShowPopup(false)
+      alert('تم التعديل بنجاح')
       handleToggleRefresh()
-      alert('updated successfuly')
-      }
+      
     } catch (error) {
-      alert('not ok')
+      alert('لم يتم التعديل تحقق من المدخلات')
       console.error(error);
     }
   }
@@ -78,13 +80,16 @@ function Campaign() {
         body: formData
       });
       const responseJson = await response.json();
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       console.log(responseJson);
       setShowFundPopup(false)
       handleToggleRefresh()
-      alert('updated successfuly')
+      alert('تم التعديل بنجاح')
     } catch (error) {
       console.error(error);
-      alert('not ok')
+      alert('لم يتم التعديل تحقق من المدخلات')
     }
   }
 

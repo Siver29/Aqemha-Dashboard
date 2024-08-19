@@ -24,7 +24,7 @@ function CampaignVolunteers({id}) {
       }
     };
     fetchData();
-  }, []);
+  }, [id]);
 
   if (error) {
     return <div>Error: {error.message}</div>;
@@ -32,12 +32,16 @@ function CampaignVolunteers({id}) {
 
   return (
     <div>
-      <h1>متطوعي الحملات</h1>
+    {data && data.length > 0 && ( 
+      <div className='mb-5'>   
+      <h2 className='mb-3'>متطوعي الحملة</h2>
       <ul>
         {data.map((item) => (
           <li key={item.id}>{item.first_name} {item.last_name}</li>
         ))}
       </ul>
+      </div>
+      )}
     </div>
   );
 }
