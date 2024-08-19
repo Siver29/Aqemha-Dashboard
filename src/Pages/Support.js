@@ -30,14 +30,14 @@ function Support() {
         const filteredData = data.data.filter((item) => item.status === 'wait').map((item) => ({
           id: item.id,
           // category: item.category_id,
-          Name: item.first_name + item.last_name,
+          Name: item.first_name + ' '+item.last_name,
           phone: item.phone_num,
           item: item.item,
           itemDetails: item.item_details,
           address: item.address,
           startDate: item.start_date,
           endDate: item.end_date,
-          status: item.status,
+          // status: item.status,
         }));
         setSupports(filteredData);
         setColumns(Object.keys(filteredData[0]));
