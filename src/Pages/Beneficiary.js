@@ -1,233 +1,284 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '../Components/Context/AuthContext';
+import React, { useEffect, useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-function Beneficiary() {
+const Beneficiary = () => {
   const [beneficiaries, setBeneficiaries] = useState([]);
-  const [filters, setFilters] = useState({
-    rate: '',
-    aidSuggested: ''
-  });
-  const [selectedBeneficiary, setSelectedBeneficiary] = useState(null);
-  const { token } = useContext(AuthContext);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [rateFilter, setRateFilter] = useState('');
+  const [aidSuggestedFilter, setAidSuggestedFilter] = useState('');
+  const [rateOptions, setRateOptions] = useState([]);
+  const [aidSuggestedOptions, setAidSuggestedOptions] = useState([]);
 
+  const token = localStorage.getItem('token');
+
+  // Fetch all beneficiaries
   useEffect(() => {
+    const fetchBeneficiaries = async () => {
+      try {
+        console.log('Fetching beneficiaries...');
+        const response = await fetch('http://localhost:8000/api/allBeneficiaries', {
+          headers: {
+            Accept: 'application/vnd.api+json',
+            type: 'application/vnd.api+json',
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+
+        const data = await response.json();
+        console.log('Beneficiaries fetched:', data);
+
+        if (Array.isArray(data.data)) {
+          setBeneficiaries(data.data);
+        } else {
+          throw new Error('Invalid data format');
+        }
+        
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching beneficiaries:', err);
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
     fetchBeneficiaries();
   }, [token]);
 
-  const fetchBeneficiaries = async () => {
-    console.log('Fetching beneficiaries...');
-    try {
-      const response = await fetch('http://localhost:8000/api/allBeneficiaries', {
-        method: 'GET',
-        headers: {
-          Accept: 'application/vnd.api+json',
-          'Content-Type': 'application/vnd.api+json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) throw new Error(`Error fetching beneficiaries: ${response.statusText}`);
-      const data = await response.json();
-      console.log('Beneficiaries fetched:', data);
-      setBeneficiaries(data.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this beneficiary?')) {
-      console.log('Deleting beneficiary with ID:', id);
+  // Fetch rate options
+  useEffect(() => {
+    const fetchRateOptions = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/removeBeneficiaries/${id}`, {
-          method: 'DELETE',
+        console.log('Fetching rate options...');
+        const response = await fetch('http://localhost:8000/api/rateFilter', {
           headers: {
             Accept: 'application/vnd.api+json',
-            'Content-Type': 'application/vnd.api+json',
-            Authorization: `Bearer ${token}`,
-          },
+            type: 'application/vnd.api+json',
+            Authorization: `Bearer ${token}`
+          }
         });
-        if (!response.ok) throw new Error(`Error deleting beneficiary: ${response.statusText}`);
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch rate options');
+        }
+
+        const data = await response.json();
+        console.log('Rate options fetched:', data);
+
+        if (Array.isArray(data.data)) {
+          setRateOptions(data.data);
+        } else {
+          throw new Error('Invalid rate options format');
+        }
+      } catch (err) {
+        console.error('Error fetching rate options:', err);
+        setError(err.message);
+      }
+    };
+
+    fetchRateOptions();
+  }, [token]);
+
+  // Fetch aid suggested options
+  useEffect(() => {
+    const fetchAidSuggestedOptions = async () => {
+      try {
+        console.log('Fetching aid suggested options...');
+        const response = await fetch('http://localhost:8000/api/aidSuggestedFilter', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/vnd.api+json',
+            type: 'application/vnd.api+json',
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ aid: '' }) // Fetch with empty aid to get all options
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch aid suggested options');
+        }
+
+        const data = await response.json();
+        console.log('Aid suggested options fetched:', data);
+
+        if (Array.isArray(data.data)) {
+          setAidSuggestedOptions(data.data);
+        } else {
+          throw new Error('Invalid aid suggested options format');
+        }
+      } catch (err) {
+        console.error('Error fetching aid suggested options:', err);
+        setError(err.message);
+      }
+    };
+
+    fetchAidSuggestedOptions();
+  }, [token]);
+
+  // Filter beneficiaries based on rate and aidSuggested
+  useEffect(() => {
+    const filterBeneficiaries = () => {
+      try {
+        console.log('Filtering beneficiaries with rateFilter:', rateFilter, 'and aidSuggestedFilter:', aidSuggestedFilter);
+        let filteredData = beneficiaries;
+
+        if (rateFilter) {
+          filteredData = filteredData.filter(b => b.final_rate === Number(rateFilter));
+        }
+
+        if (aidSuggestedFilter) {
+          filteredData = filteredData.filter(b => JSON.parse(b.aid_suggested).includes(aidSuggestedFilter));
+        }
+
+        setBeneficiaries(filteredData);
+      } catch (err) {
+        console.error('Error filtering beneficiaries:', err);
+        setError(err.message);
+      }
+    };
+
+    filterBeneficiaries();
+  }, [rateFilter, aidSuggestedFilter, beneficiaries]);
+
+  const handleDelete = async (id) => {
+    if (!id) return;
+
+    if (window.confirm('Are you sure you want to delete this beneficiary?')) {
+      try {
+        console.log('Deleting beneficiary with ID:', id);
+        const response = await fetch(`http://localhost:8000/api/removeBeneficiaries/${id}`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/vnd.api+json',
+            type: 'application/vnd.api+json',
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to delete');
+        }
+
+        setBeneficiaries(prev => prev.filter(b => b.id !== id));
         console.log('Beneficiary deleted successfully');
-        setBeneficiaries(beneficiaries.filter(beneficiary => beneficiary.id !== id));
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        console.error('Error deleting beneficiary:', err);
+        setError(err.message);
       }
     }
   };
 
-  const handleUpdate = (beneficiary) => {
-    setSelectedBeneficiary(beneficiary);
-    console.log('Selected beneficiary for update:', beneficiary);
+  const handleEdit = (id) => {
+    if (!id) return;
+    console.log('Edit beneficiary with ID:', id);
   };
 
-  const handleFilterChange = (e) => {
-    setFilters({ ...filters, [e.target.name]: e.target.value });
-    console.log('Filters updated:', filters);
-  };
-
-  const applyFilters = async () => {
-    console.log('Applying filters:', filters);
+  const handleFilterByHighestRate = async () => {
     try {
+      console.log('Filtering by highest rate...');
       const response = await fetch('http://localhost:8000/api/rateFilter', {
-        method: 'POST',
         headers: {
           Accept: 'application/vnd.api+json',
-          'Content-Type': 'application/vnd.api+json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(filters),
+          type: 'application/vnd.api+json',
+          Authorization: `Bearer ${token}`
+        }
       });
-      if (!response.ok) throw new Error(`Error applying filters: ${response.statusText}`);
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch rate filter');
+      }
+
       const data = await response.json();
-      console.log('Filtered beneficiaries:', data);
-      setBeneficiaries(data.data);
-    } catch (error) {
-      console.error(error);
+      console.log('Rate filter data:', data);
+
+      if (Array.isArray(data.data)) {
+        const highestRate = Math.max(...data.data);
+        setRateFilter(highestRate);
+        console.log('Highest rate set to:', highestRate);
+      } else {
+        throw new Error('Invalid rate filter format');
+      }
+    } catch (err) {
+      console.error('Error fetching rate filter:', err);
+      setError(err.message);
     }
   };
 
-  const handleUpdateBeneficiary = async (beneficiary) => {
-    console.log('Updating beneficiary:', beneficiary);
-    try {
-      const response = await fetch(`http://localhost:8000/api/updateBeneficiaries/${beneficiary.id}`, {
-        method: 'PUT',
-        headers: {
-          Accept: 'application/vnd.api+json',
-          'Content-Type': 'application/vnd.api+json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(beneficiary),
-      });
-      if (!response.ok) throw new Error(`Error updating beneficiary: ${response.statusText}`);
-      console.log('Beneficiary updated successfully');
-      setSelectedBeneficiary(null);
-      fetchBeneficiaries();
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  if (loading) return <div className="alert alert-info">Loading...</div>;
+  if (error) return <div className="alert alert-danger">Error: {error}</div>;
 
   return (
-    <div className="container mt-4">
-      <div className="mb-4">
-        <h2>Beneficiaries</h2>
-        <div className="mb-3">
-          <label htmlFor="rate" className="form-label">Rate</label>
-          <input
-            type="text"
-            id="rate"
-            name="rate"
-            className="form-control"
-            value={filters.rate}
-            onChange={handleFilterChange}
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="aidSuggested" className="form-label">Aid Suggested</label>
+    <div className="container mt-5">
+      <h2 className="text-center text-primary mb-4">Beneficiaries List</h2>
+
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <button className="btn btn-success" onClick={handleFilterByHighestRate}>
+          Filter by Highest Rate
+        </button>
+        
+        <div className="d-flex align-items-center">
+          <label htmlFor="aidSuggestedFilter" className="form-label me-2 mb-0">Filter by Aid Suggested:</label>
           <select
-            id="aidSuggested"
-            name="aidSuggested"
+            id="aidSuggestedFilter"
             className="form-select"
-            value={filters.aidSuggested}
-            onChange={handleFilterChange}
+            value={aidSuggestedFilter}
+            onChange={(e) => setAidSuggestedFilter(e.target.value)}
           >
             <option value="">Select Aid</option>
-            {/* Add options dynamically if needed */}
-            <option value="Aid1">Aid 1</option>
-            <option value="Aid2">Aid 2</option>
+            {aidSuggestedOptions.map(aid => (
+              <option key={aid} value={aid}>{aid.charAt(0).toUpperCase() + aid.slice(1)}</option>
+            ))}
           </select>
         </div>
-        <button className="btn btn-primary" onClick={applyFilters}>Apply Filters</button>
       </div>
-      <table className="table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Phone Number</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {beneficiaries.map((beneficiary) => (
-            <tr key={beneficiary.id}>
-              <td>{beneficiary.id}</td>
-              <td>{beneficiary.first_name}</td>
-              <td>{beneficiary.last_name}</td>
-              <td>{beneficiary.phone_num}</td>
-              <td>
-                <button
-                  className="btn btn-warning me-2"
-                  onClick={() => handleUpdate(beneficiary)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => handleDelete(beneficiary.id)}
-                >
-                  Delete
-                </button>
-              </td>
+
+      <div className="table-responsive">
+        <table className="table table-striped table-bordered table-hover">
+          <thead className="table-dark">
+            <tr>
+              <th>First Name</th>
+              <th>Father Name</th>
+              <th>Last Name</th>
+              <th>Aid Suggested</th>
+              <th>Final Rate</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      {selectedBeneficiary && (
-        <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Edit Beneficiary</h5>
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <form>
-                  <div className="mb-3">
-                    <label htmlFor="editFirstName" className="form-label">First Name</label>
-                    <input
-                      type="text"
-                      id="editFirstName"
-                      className="form-control"
-                      value={selectedBeneficiary.first_name}
-                      onChange={(e) => setSelectedBeneficiary({ ...selectedBeneficiary, first_name: e.target.value })}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="editLastName" className="form-label">Last Name</label>
-                    <input
-                      type="text"
-                      id="editLastName"
-                      className="form-control"
-                      value={selectedBeneficiary.last_name}
-                      onChange={(e) => setSelectedBeneficiary({ ...selectedBeneficiary, last_name: e.target.value })}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="editPhoneNum" className="form-label">Phone Number</label>
-                    <input
-                      type="text"
-                      id="editPhoneNum"
-                      className="form-control"
-                      value={selectedBeneficiary.phone_num}
-                      onChange={(e) => setSelectedBeneficiary({ ...selectedBeneficiary, phone_num: e.target.value })}
-                    />
-                  </div>
-                </form>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" className="btn btn-primary" onClick={() => handleUpdateBeneficiary(selectedBeneficiary)}>Save changes</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+          </thead>
+          <tbody>
+            {beneficiaries.map((beneficiary) => (
+              <tr key={beneficiary.id}>
+                <td>{beneficiary.first_name}</td>
+                <td>{beneficiary.father_name}</td>
+                <td>{beneficiary.last_name}</td>
+                <td>{JSON.parse(beneficiary.aid_suggested).join(', ')}</td>
+                <td>{beneficiary.final_rate}</td>
+                <td>
+                  <button 
+                    className="btn btn-warning me-2"
+                    onClick={() => handleEdit(beneficiary.id)}
+                  >
+                    Edit
+                  </button>
+                  <button 
+                    className="btn btn-danger"
+                    onClick={() => handleDelete(beneficiary.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
-}
+};
 
 export default Beneficiary;
