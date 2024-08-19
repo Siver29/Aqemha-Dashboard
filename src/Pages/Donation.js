@@ -9,7 +9,7 @@ function Donation() {
 
   const fetchDonations = async () => {
     let token = localStorage.getItem('token');
-    
+
     if (!token) {
       console.error('No token available in localStorage');
       return;
@@ -131,7 +131,7 @@ function Donation() {
 
       <div className="filter-buttons mb-3">
         <button
-          className={`btn ${filter === 'newest' ? 'btn-primary' : 'btn-outline-primary'} shadow-sm`}
+          className={`btn ${filter === 'newest' ? 'btn-custom-primary' : 'btn-custom-outline-primary'} shadow-sm`}
           onClick={() => {
             setFilter('newest');
             console.log('Filter set to newest');
@@ -140,7 +140,7 @@ function Donation() {
           الأحدث
         </button>
         <button
-          className={`btn ${filter === 'amount' ? 'btn-primary' : 'btn-outline-primary'} shadow-sm`}
+          className={`btn ${filter === 'amount' ? 'btn-custom-primary' : 'btn-custom-outline-primary'} shadow-sm`}
           onClick={() => {
             setFilter('amount');
             console.log('Filter set to amount');
@@ -149,7 +149,7 @@ function Donation() {
           حسب المبلغ
         </button>
         <button
-          className={`btn ${filter === 'date' ? 'btn-primary' : 'btn-outline-primary'} shadow-sm`}
+          className={`btn ${filter === 'date' ? 'btn-custom-primary' : 'btn-custom-outline-primary'} shadow-sm`}
           onClick={() => {
             setFilter('date');
             console.log('Filter set to date');
@@ -158,6 +158,7 @@ function Donation() {
           حسب التاريخ
         </button>
       </div>
+
 
       {filter === 'date' && (
         <div className="date-filter mb-3">

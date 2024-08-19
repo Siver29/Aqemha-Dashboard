@@ -1,59 +1,140 @@
-/* Beneficiary.css */
+/* تحسين التصميم الأساسي */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.beneficiary-container {
+  flex: 1;
+  padding: 20px;
+  background-color: var(--app-bg);
+  border-radius: 8px;
+  overflow-y: auto;
+}
 
 /* تحسين تصميم الأزرار */
 .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-  }
-  
-  .btn-outline-primary {
-    color: #007bff;
-    border-color: #007bff;
-  }
-  
-  .btn-outline-primary:hover {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  /* تحسين تصميم الجدول */
-  .table {
-    margin-top: 20px;
-  }
-  
-  .table-dark th {
-    background-color: #343a40;
-    color: #fff;
-  }
-  
-  .beneficiary-container {
-    max-width: 1200px;
-    margin: auto;
-  }
-  
-  .filter-buttons .btn {
-    margin-right: 10px;
-  }
-  
-  .table-responsive {
-    overflow-x: auto;
-  }
-  
-  .header {
-    margin-bottom: 20px;
-  }
-  
-  .add-beneficiary-button {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 1000;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    font-size: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
+  background-color: #259F88 !important;
+  border-color: #259F88 !important;
+  color: white !important;
+  transition: background-color 0.3s ease, border-color 0.3s ease !important;
+}
+
+.btn-outline-primary {
+  color: #259F88 !important;
+  border-color: #259F88 !important;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+}
+
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary:hover {
+  background-color: #207c6e !important;
+  border-color: #207c6e !important;
+  color: white !important;
+  box-shadow: none !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:active,
+.btn-outline-primary:focus {
+  background-color: #259F88 !important;
+  color: white !important;
+  border-color: #259F88 !important;
+  box-shadow: none !important;
+}
+
+/* تحسين تصميم أداة الاختيار (select) لتكون متناسقة مع الأزرار */
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-controls .btn,
+.filter-controls .form-select {
+  flex: 1;
+  max-width: 250px;
+  box-sizing: border-box;
+}
+
+.filter-controls .form-select {
+  background-color: #259F88 !important;
+  color: white !important;
+  border-color: #259F88 !important;
+  border-radius: 4px !important;
+  padding: 10px !important;
+  font-size: 1rem !important;
+  appearance: none !important; /* إزالة تنسيق المتصفح الافتراضي */
+  cursor: pointer !important;
+}
+
+.filter-controls .form-select option {
+  background-color: #ffffff !important; /* لون خلفية الخيارات */
+  color: #000000 !important; /* لون نص الخيارات */
+}
+
+.filter-controls .form-select:hover,
+.filter-controls .form-select:focus {
+  background-color: #207c6e !important;
+  border-color: #207c6e !important;
+  outline: none !important;
+}
+
+/* تحسين تصميم الجدول */
+.table {
+  margin-top: 20px !important;
+}
+
+.table-dark th {
+  background-color: #343a40 !important;
+  color: #fff !important;
+}
+
+.table-responsive {
+  overflow-x: auto !important;
+}
+
+/* تحسين تنسيق الرأس */
+.header {
+  margin-bottom: 20px !important;
+}
+
+.header h2 {
+  color: #343a40 !important;
+  font-size: 2rem !important; /* حجم الخط أكبر */
+  font-family: 'Arial', sans-serif !important; /* تغيير الخط */
+  font-weight: bold !important; /* جعل الخط عريض */
+}
+
+/* تحسين تصميم زر إضافة المستفيدين */
+.add-beneficiary-button {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #259F88 !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+  transition: background-color 0.3s ease !important;
+}
+
+.add-beneficiary-button:hover {
+  background-color: #207c6e !important;
+}

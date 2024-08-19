@@ -118,13 +118,12 @@ const Beneficiary = () => {
   return (
     <div className="container beneficiary-container p-4">
       <div className="header mb-4">
-        <h2 className="text-primary">قائمة المستفيدين</h2>
-        <div className="alert alert-success">إليك قائمة بجميع المستفيدين.</div>
+        <h2>قائمة المستفيدين</h2>
       </div>
 
-      <div className="filter-controls mb-3 d-flex justify-content-center gap-2">
+      <div className="filter-controls mb-3">
         <button
-          className={`btn ${filter === 'rating' ? 'btn-primary' : 'btn-outline-primary'} shadow-sm w-100 w-md-auto`}
+          className={`btn ${filter === 'rating' ? 'btn-primary' : 'btn-outline-primary'} shadow-sm`}
           onClick={() => {
             setFilter(filter === 'rating' ? null : 'rating');
             console.log(`Filter set to ${filter === 'rating' ? 'none' : 'rating'}`);
@@ -134,7 +133,7 @@ const Beneficiary = () => {
         </button>
 
         <select
-          className="form-select w-100 w-md-auto"
+          className="form-select"
           aria-label="فلترة حسب المساعدة"
           value={aidFilter}
           onChange={(e) => setAidFilter(e.target.value)}
@@ -146,6 +145,7 @@ const Beneficiary = () => {
           <option value="clothes">ملابس</option>
         </select>
       </div>
+
 
       {loading && <div className="alert alert-info">جاري تحميل البيانات...</div>}
       {error && <div className="alert alert-danger">خطأ: {error}</div>}

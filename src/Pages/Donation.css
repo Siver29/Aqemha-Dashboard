@@ -1,28 +1,70 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 .donation-container {
-    background-color: #f8f9fa;
+    background-color: var(--app-bg);
     border-radius: 8px;
-  }
-  
-  .nav-tabs .nav-link {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.nav-tabs .nav-link {
     font-size: 1.1rem;
-    color: #007bff;
+    color: var(--sidebar-hover-link);
     cursor: pointer;
-  }
-  
-  .nav-tabs .nav-link.active {
-    background-color: #007bff;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: var(--sidebar-hover-link);
     color: #fff;
     border-radius: 8px 8px 0 0;
-  }
-  
-  .filter-buttons .btn {
+}
+
+.filter-buttons .btn {
     margin-right: 10px;
     transition: background-color 0.3s ease;
-  }
-  
-  .date-filter .form-control {
+}
+
+.date-filter .form-control {
     max-width: 250px;
     display: inline-block;
     margin-right: 10px;
-  }
-  
+}
+
+/* تخصيص لون الأزرار */
+.btn-custom-primary {
+    background-color: #259F88;
+    border-color: #259F88;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.btn-custom-outline-primary {
+    background-color: transparent;
+    border-color: #259F88;
+    color: #259F88;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-custom-primary:hover {
+    background-color: #207c6e;
+    /* لون أغمق عند hover */
+    border-color: #207c6e;
+    color: white;
+}
+
+.btn-custom-outline-primary:hover {
+    background-color: #207c6e;
+    /* لون أغمق عند hover */
+    border-color: #207c6e;
+    color: white;
+}
